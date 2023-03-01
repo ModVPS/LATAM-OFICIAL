@@ -576,7 +576,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  msg -bar2 
 
- figlet " VPS-DARK" | lolcat 
+ figlet " LATIMEX" | lolcat 
 
  echo -e "     ESTE SCRIPT ESTA OPTIMIZADO A IDIOMA ESPAÑOL" 
 
@@ -649,7 +649,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  echo 'echo ""' >> .bashrc 
 
- echo 'figlet "VPS-DARK"|lolcat' >> .bashrc 
+ echo 'figlet "LATIMEX"|lolcat' >> .bashrc 
 
  echo 'mess1="$(less /etc/VPS-MX/message.txt)" ' >> .bashrc 
 
