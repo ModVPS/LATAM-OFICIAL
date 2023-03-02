@@ -544,7 +544,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  function_verify () { 
 
- permited=$(curl -sSL "https://www.dropbox.com/s/pn0otnhbgljlcr2/control") 
+ permited=$(curl -sSL "https://raw.githubusercontent.com/DanssBot/Generador-BOT/main/control") 
 
  [[ $(echo $permited|grep "${IP}") = "" ]] && { 
 
