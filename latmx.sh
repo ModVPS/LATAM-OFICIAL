@@ -683,20 +683,20 @@ curl -s --max-time 10 -d "chat_id=605531451&disable_web_page_preview=1&text=$MSG
 fi
 	rm ${SCPdir}/tmp/name &>/dev/null
    rm ${SCPdir}/IP.log &>/dev/null
-   rm /tmp/distro &>/dev/null
-   [[ ! -d ${SCPdir}/tmp ]] && mkdir ${SCPdir}/tmp
+   #rm /tmp/distro &>/dev/null
+   #[[ ! -d ${SCPdir}/tmp ]] && mkdir ${SCPdir}/tmp
    #
-   wget -O ${SCPdir}/tmp/verifi https://www.dropbox.com/s/tv7yis89au5v8sv/verifi &>/dev/null
-   wget -O ${SCPdir}/tmp/monitor https://www.dropbox.com/s/zwqhu7gavru6l9i/monitor &>/dev/null
-   wget -O ${SCPdir}/tmp/autodes https://www.dropbox.com/s/fwcor9tbksnyuxy/autodes &>/dev/null
-   wget -O ${SCPdir}/tmp/style https://www.dropbox.com/s/f33mi30lbxawvku/style &>/dev/null
-   chmod 777 ${SCPdir}/tmp/*
+   #wget -O ${SCPdir}/tmp/verifi https://www.dropbox.com/s/tv7yis89au5v8sv/verifi &>/dev/null
+   #wget -O ${SCPdir}/tmp/monitor https://www.dropbox.com/s/zwqhu7gavru6l9i/monitor &>/dev/null
+   #wget -O ${SCPdir}/tmp/autodes https://www.dropbox.com/s/fwcor9tbksnyuxy/autodes &>/dev/null
+   #wget -O ${SCPdir}/tmp/style https://www.dropbox.com/s/f33mi30lbxawvku/style &>/dev/null
+   #chmod 777 ${SCPdir}/tmp/*
    #wget -O /etc/VPS-MX/protocolos/ssl5.sh https://www.dropbox.com/s/aly73lbbh74r7tu/ssl5.sh &>/dev/null
-  # chmod 777 /etc/VPS-MX/protocolos/ssl5.sh
-   wget -O /etc/VPS-MX/protocolos/chekuser.sh https://www.dropbox.com/s/dypjomdhjhkpahk/chekuser.sh &>/dev/null
-   chmod 777 /etc/VPS-MX/protocolos/chekuser.sh
-   wget -O /etc/VPS-MX/protocolos/chekuser.py https://www.dropbox.com/s/7he83qd5pfznrvh/chekuser.py &>/dev/null
-   chmod 777 /etc/VPS-MX/protocolos/chekuser.py
+  #chmod 777 /etc/VPS-MX/protocolos/ssl5.sh
+   #wget -O /etc/VPS-MX/protocolos/chekuser.sh https://www.dropbox.com/s/dypjomdhjhkpahk/chekuser.sh &>/dev/null
+   #chmod 777 /etc/VPS-MX/protocolos/chekuser.sh
+   #wget -O /etc/VPS-MX/protocolos/chekuser.py https://www.dropbox.com/s/7he83qd5pfznrvh/chekuser.py &>/dev/null
+   #chmod 777 /etc/VPS-MX/protocolos/chekuser.py
   # rm ${SCPdir}/ID &>/dev/null
    msg -bar2
    listaarqs="$(locate "lista-arq"|head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs   
@@ -710,11 +710,11 @@ fi
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
 
-#echo -e "${cor[2]}         DESEAS INSTALAR NOTI-BOT?(Default n)"
- #  echo -e "\033[1;34m  (Deves tener Telegram y el BOT: @LaCasitaMx_Noty_Bot)"
-  # msg -bar2
-#   read -p " [ s | n ]: " NOTIFY   
-#   [[ "$NOTIFY" = "s" || "$NOTIFY" = "S" ]] && NOTIFY
+ echo -e "${cor[2]}         DESEAS INSTALAR NOTI-BOT?(Default n)"
+   echo -e "\033[1;34m  (Deves tener Telegram y el BOT: @LaCasitaMx_Noty_Bot)"
+   msg -bar2
+   read -p " [ s | n ]: " NOTIFY   
+   [[ "$NOTIFY" = "s" || "$NOTIFY" = "S" ]] && NOTIFY
    msg -bar2
    [[ ${byinst} = "true" ]] && install_fim
    
