@@ -21,9 +21,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 }
 
  os_system(){ 
-
  system=$(cat -n /etc/issue |grep 1 |cut -d ' ' -f6,7,8 |sed 's/1//' |sed 's/      //') 
-
  distro=$(echo "$system"|awk '{print $1}') 
 
  case $distro in 
@@ -576,7 +574,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  msg -bar2 
 
- figlet " VPS-DARK" | lolcat 
+ figlet " LATMX" | lolcat 
 
  echo -e "     ESTE SCRIPT ESTA OPTIMIZADO A IDIOMA ESPAÑOL" 
 
@@ -919,9 +917,8 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  cd $HOME 
 
- wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[1;32m Ofus Correcto" || { 
-
- echo -e "\033[1;91m Ofus Incorrecto" 
+ wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[1;32m Ofus Correcto" |pv -qL 30 || {
+   echo -e "\033[1;91m Ofus Incorrecto" 
 
  invalid_key 
 
@@ -1048,7 +1045,5 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  invalid_key 
 
  rm -rf VPSDARK ista-arq 
-
  fi 
-
  rm -rf VPSDARK lista-arq
