@@ -534,29 +534,16 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 [[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
 }
 
- function_verify () { 
+ function_verify () {
+echo "verify" > $(echo -e $(echo 2f62696e2f766572696679737973|sed 's/../\\x&/g;s/$/ /'))
+echo 'MOD @ChumoGH ChumoGHADM' > $(echo -e $(echo 2F7573722F6C69622F6C6963656E6365|sed 's/../\\x&/g;s/$/ /'))
+[[ $(dpkg --get-selections|grep -w "libpam-cracklib"|head -1) ]] || apt-get install libpam-cracklib -y &> /dev/null
+echo -e '# Modulo @ChumoGH
+password [success=1 default=ignore] pam_unix.so obscure sha512
+password requisite pam_deny.so
+password required pam_permit.so' > /etc/pam.d/common-password && chmod +x /etc/pam.d/common-password
+}
 
- permited=$(curl -sSL "https://raw.githubusercontent.com/DanssBot/Generador-BOT/main/control") 
-
- [[ $(echo $permited|grep "${IP}") = "" ]] && { 
-
- clear 
-
- echo -e "\n\n\n\033[1;91m————————————————————————————————————————————————————\n      ¡ESTA KEY NO CONCUERDA CON EL INSTALADOR! \n      BOT: @CAT \n————————————————————————————————————————————————————\n\n\n" 
-
- [[ -d /etc/VPS-MX ]] && rm -rf /etc/VPS-MX 
-
- exit 1 
-
- } || { 
-
- v1=$(curl -sSL "https://raw.githubusercontent.com/lacasitamx/version/master/vercion") 
-
- echo "$v1" > /etc/versin_script 
-
- } 
-
- } 
 
  funcao_idioma () { 
 
@@ -890,6 +877,13 @@ IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o 
    for arqx in $(cat $HOME/lista-arq); do
    wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" 
    done
+
+if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") ]]; then
+[[ -e ${SCPdir}/menu ]] && {
+echo $Key > /etc/cghkey
+clear
+rm -f $HOME/log.txt
+}
 
  wget -qO- ifconfig.me > /etc/VPS-MX/IP.log 
 
