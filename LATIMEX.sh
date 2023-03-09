@@ -175,7 +175,7 @@ echo "$txtofus" | rev
 [[ ! -d ${SCPdir} ]] && mkdir ${SCPdir}
 mv -f ${SCPinstal}/$1 ${SCPdir}/$1 && chmod +x ${SCPdir}/$1
 }
-fun_ip
+
 
  NOTIFY () { 
 
