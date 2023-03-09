@@ -855,6 +855,7 @@ msg -bar
 tput cuu1 && tput dl1
 }
 }
+}
 
  while [[ ! $Key ]]; do 
 
