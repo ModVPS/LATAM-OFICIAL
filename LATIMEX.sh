@@ -897,57 +897,35 @@ echo "$txtofus" | rev
 
  msg -bar2 && msg -ne "\033[1;93m          >>> INGRESE SU KEY ABAJO <<<\n   \033[1;37m" && read Key 
 
- tput cuu1 && tput dl1 
-
- done 
-
- msg -ne "    # Verificando Key # : " 
-
- cd $HOME 
-
- wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[1;32m Ofus Correcto" || { 
-
- echo -e "\033[1;91m Ofus Incorrecto" 
-
- invalid_key 
-
- exit 
-
- } 
-
- IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/venip 
-
- sleep 1s 
-
-#function_verify 
-
- updatedb 
-
- if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "Code de KEY Invalido!") ]]; then 
-
- msg -bar2 
-
- msg -verd "    $(source trans -b es:${id} "Ficheros Copiados"|sed -e 's/[^a-z -]//ig'): \e[97m[\e[93m@CAT\e[97m]" 
-
- REQUEST=$(ofus "$Key"|cut -d'/' -f2) 
-
- [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal} 
-
- pontos="." 
-
- stopping="Descargando Ficheros" 
-
- for arqx in $(cat $HOME/lista-arq); do 
-
- msg -verm "${stopping}${pontos}" 
-
- wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun 
-
- tput cuu1 && tput dl1 
-
- pontos+="." 
-
- done 
+ echo -ne " " && msg -bar3
+echo -ne " \033[1;41m Key : \033[0;33m" && read Key
+tput cuu1 && tput dl1
+done
+Key="$(echo "$Key" | tr -d '[[:space:]]')"
+cd $HOME
+IiP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+[[ $(curl -s --connect-timeout 5 $IiP:8888 ) ]] && { 
+tput cuu1 && tput dl1
+msg -bar
+echo -ne " \e[90m\e[43m CHEK KEY : \033[0;33m"
+echo -e " \e[3;32m ENLAZADA AL GENERADOR\e[0m" | pv -qL 50
+ofen=$(wget -qO- $(ofus $Key))
+tput cuu1 && tput dl1
+msg -bar3
+echo -ne " \033[1;41m CHEK KEY : \033[0;33m"
+tput cuu1 && tput dl1
+wget --no-check-certificate -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -ne "\033[1;34m [ \e[3;32m VERIFICANDO KEY  \e[0m \033[1;34m]\033[0m" && pkrm=$(ofus "$Key")
+} || {
+	echo -e "\e[3;31mCONEXION FALLIDA\e[0m" && sleep 1s
+	invalid_key && exit
+}
+[[ -e $HOME/log.txt ]] && rm -f $HOME/log.txt
+IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/vendor_code
+   REQUEST=$(ofus "$Key"|cut -d'/' -f2)
+   [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
+   for arqx in $(cat $HOME/lista-arq); do
+   wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" 
+   done 
 
  wget -qO- ifconfig.me > /etc/VPS-MX/IP.log 
 
