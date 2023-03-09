@@ -47,7 +47,9 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  comando="$1" 
 
  _=$( 
+
  $comando > /dev/null 2>&1 
+
  ) & > /dev/null 
 
  pid=$! 
@@ -520,13 +522,6 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  } 
 
-act_ufw() {
-[[ -f "/usr/sbin/ufw" ]] && ufw allow 81/tcp ; ufw allow 8888/tcp
-}
-[[ -z $(cat /etc/resolv.conf | grep "8.8.8.8") ]] && echo "nameserver	8.8.8.8" >> /etc/resolv.conf
-[[ -z $(cat /etc/resolv.conf | grep "1.1.1.1") ]] && echo "nameserver	1.1.1.1" >> /etc/resolv.conf
-cd $HOME
-
  fun_ip () { 
 
  MIP2=$(wget -qO- ifconfig.me) 
@@ -568,7 +563,6 @@ cd $HOME
  } 
 
  } 
-
 
  funcao_idioma () { 
 
@@ -653,7 +647,7 @@ cd $HOME
 
  echo 'echo ""' >> .bashrc 
 
- echo 'figlet "LATIMEX"|lolcat' >> .bashrc 
+ echo 'figlet "VPS-DARK"|lolcat' >> .bashrc 
 
  echo 'mess1="$(less /etc/VPS-MX/message.txt)" ' >> .bashrc 
 
@@ -671,7 +665,7 @@ cd $HOME
 
  echo -e "         COMANDO PRINCIPAL PARA ENTRAR AL PANEL " 
 
- echo -e "  \033[1;41m               menu             \033[0;37m" && msg -bar2 
+ echo -e "  \033[1;41m               sudo vpsdark             \033[0;37m" && msg -bar2 
 
  rm -rf /usr/bin/pytransform &> /dev/null 
 
@@ -685,37 +679,101 @@ cd $HOME
 
  } 
 
-  ofus () {
-unset txtofus
-number=$(expr length $1)
-for((i=1; i<$number+1; i++)); do
-txt[$i]=$(echo "$1" | cut -b $i)
-case ${txt[$i]} in
-".")txt[$i]="x";;
-"x")txt[$i]=".";;
-"5")txt[$i]="s";;
-"s")txt[$i]="5";;
-"1")txt[$i]="@";;
-"@")txt[$i]="1";;
-"2")txt[$i]="?";;
-"?")txt[$i]="2";;
-"4")txt[$i]="0";;
-"0")txt[$i]="4";;
-"/")txt[$i]="K";;
-"K")txt[$i]="/";;
-esac
-txtofus+="${txt[$i]}"
-done
-echo "$txtofus" | rev
-}
+  ofus () { 
+ unset server 
+ server=$(echo ${txt_ofuscatw}|cut -d':' -f1) 
+ unset txtofus 
+ number=$(expr length $1) 
+ for((i=1; i<$number+1; i++)); do 
+ txt[$i]=$(echo "$1" | cut -b $i) 
+ case ${txt[$i]} in 
+ ".")txt[$i]="C";; 
+ "C")txt[$i]=".";; 
+ "3")txt[$i]="@";; 
+ "@")txt[$i]="3";; 
+ "5")txt[$i]="9";; 
+ "9")txt[$i]="5";; 
+ "6")txt[$i]="P";; 
+ "P")txt[$i]="6";; 
+ "L")txt[$i]="O";; 
+ "O")txt[$i]="L";; 
+ esac 
+ txtofus+="${txt[$i]}" 
+ done 
+ echo "$txtofus" | rev 
+ } 
 
- verificar_arq () {
-[[ ! -d ${SCPdir} ]] && mkdir ${SCPdir}
-mv -f ${SCPinstal}/$1 ${SCPdir}/$1 && chmod +x ${SCPdir}/$1
-}
-fun_ip
+ verificar_arq () { 
 
+ [[ ! -d ${SCPdir} ]] && mkdir ${SCPdir} 
+ 
+ [[ ! -d ${tmp} ]] && mkdir ${tmp} 
+ touch /etc/VPS-MX/tmp/style
+ [[ ! -d ${SCPusr} ]] && mkdir ${SCPusr} 
 
+ [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm} 
+
+ [[ ! -d ${SCPinst} ]] && mkdir ${SCPinst} 
+
+ case $1 in 
+
+ "menu"|"message.txt"|"ID")ARQ="${SCPdir}/";; #Menu 
+
+ "usercodes")ARQ="${SCPusr}/";; #Panel SSRR 
+ 
+ "ADMbot.sh")ARQ="${SCPfrm}/";;
+ 
+ "apacheon.sh")ARQ="${SCPfrm}/";;
+ 
+ "tcp.sh")ARQ="${SCPfrm}/";;
+ 
+ "fai2ban.sh")ARQ="${SCPfrm}/";;
+ 
+ "blockBT.sh")ARQ="${SCPfrm}/";;
+ 
+ "ultrahost")ARQ="${SCPfrm}/";;
+ 
+ "speed.py")ARQ="${SCPfrm}/";;
+ 
+ "squidpass.sh")ARQ="${SCPfrm}/";;
+
+ "C-SSR.sh")ARQ="${SCPinst}/";; #Panel SSR 
+ 
+ "extras.sh")ARQ="${SCPinst}/";; #Panel SSR 
+
+ "openssh.sh")ARQ="${SCPinst}/";; #OpenVPN 
+
+ "squid.sh")ARQ="${SCPinst}/";; #Squid 
+
+ "dropbear.sh"|"proxy.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "proxy.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "openvpn.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "ssl.sh"|"python.py")ARQ="${SCPinst}/";; #Instalacao 
+
+ "shadowsocks.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "Shadowsocks-libev.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "Shadowsocks-R.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "v2ray.sh"|"slowdns.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "budp.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "sockspy.sh"|"PDirect.py"|"PPub.py"|"PPriv.py"|"POpen.py"|"PGet.py")ARQ="${SCPinst}/";; #Instalacao 
+
+ *)ARQ="${SCPfrm}/";; #Herramientas 
+
+ esac 
+
+ mv -f ${SCPinstal}/$1 ${ARQ}/$1 
+
+ chmod +x ${ARQ}/$1 
+
+ } 
 
  NOTIFY () { 
 
@@ -851,35 +909,56 @@ fun_ip
 
  msg -bar2 && msg -ne "\033[1;93m          >>> INGRESE SU KEY ABAJO <<<\n   \033[1;37m" && read Key 
 
- echo -ne " " && msg -bar3
-echo -ne " \033[1;41m Key : \033[0;33m" && read Key
-tput cuu1 && tput dl1
-done
-Key="$(echo "$Key" | tr -d '[[:space:]]')"
-cd $HOME
-IiP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
-[[ $(curl -s --connect-timeout 5 $IiP:8888 ) ]] && { 
-tput cuu1 && tput dl1
-msg -bar
-echo -ne " \e[90m\e[43m CHEK KEY : \033[0;33m"
-echo -e " \e[3;32m ENLAZADA AL GENERADOR\e[0m" | pv -qL 50
-ofen=$(wget -qO- $(ofus $Key))
-tput cuu1 && tput dl1
-msg -bar3
-echo -ne " \033[1;41m CHEK KEY : \033[0;33m"
-tput cuu1 && tput dl1
-wget --no-check-certificate -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -ne "\033[1;34m [ \e[3;32m VERIFICANDO KEY  \e[0m \033[1;34m]\033[0m" && pkrm=$(ofus "$Key")
-} || {
-	echo -e "\e[3;31mCONEXION FALLIDA\e[0m" && sleep 1s
-	invalid_key && exit
-}
-[[ -e $HOME/log.txt ]] && rm -f $HOME/log.txt
-IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/vendor_code
-   REQUEST=$(ofus "$Key"|cut -d'/' -f2)
-   [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
-   for arqx in $(cat $HOME/lista-arq); do
-   wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" 
-   done 
+ tput cuu1 && tput dl1 
+
+ done 
+
+ msg -ne "    # Verificando Key # : " 
+
+ cd $HOME 
+
+ wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[1;32m Ofus Correcto" |pv -qL 30 || {
+   echo -e "\033[1;91m Ofus Incorrecto" 
+
+ invalid_key 
+
+ exit 
+
+ } 
+
+ IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/venip 
+
+ sleep 1s 
+
+#function_verify 
+
+ updatedb 
+
+ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "Code de KEY Invalido!") ]]; then 
+
+ msg -bar2 
+
+ msg -verd "    $(source trans -b es:${id} "Ficheros Copiados"|sed -e 's/[^a-z -]//ig'): \e[97m[\e[93m@CAT\e[97m]" 
+
+ REQUEST=$(ofus "$Key"|cut -d'/' -f2) 
+
+ [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal} 
+
+ pontos="." 
+
+ stopping="Descargando Ficheros" 
+
+ for arqx in $(cat $HOME/lista-arq); do 
+
+ msg -verm "${stopping}${pontos}" 
+
+ wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun 
+
+ tput cuu1 && tput dl1 
+
+ pontos+="." 
+
+ done 
 
  wget -qO- ifconfig.me > /etc/VPS-MX/IP.log 
 
@@ -966,7 +1045,5 @@ IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o 
  invalid_key 
 
  rm -rf VPSDARK ista-arq 
-
  fi 
-
  rm -rf VPSDARK lista-arq
