@@ -871,27 +871,49 @@ echo "$txtofus" | rev
 
  } 
 
- error_fun () { 
+ error_conex () {
+[[ -e $HOME/lista-arq ]] && list_fix="$(cat < $HOME/lista-arq)" || list_fix=""
+msg -bar 
+echo -e "\033[41m     --      SISTEMA ACTUAL $(lsb_release -si) $(lsb_release -sr)      --"
+[[ "$list_fix" = "" ]] && {
+msg -bar 
+echo -e " ERROR (PORT 8888 TCP) ENTRE GENERADOR <--> VPS "
+echo -e "    NO EXISTE CONEXION ENTRE EL GENERADOR "
+echo -e "  - \e[3;32mGENERADOR O KEYGEN COLAPZADO\e[0m - "
+}
 
- msg -bar2 && msg -verm "ERROR entre VPS<-->GENERADOR (Port 81 TCP)" && msg -bar2 
-
- [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal} 
-
- exit 1 
-
- } 
-
- invalid_key () { 
-
- msg -bar2 && msg -verm "  Code Invalido -- #¡Key Invalida#! " && msg -bar2 
-
- [[ -e $HOME/lista-arq ]] && rm $HOME/lista-arq 
-
- rm -rf lista-arq 
-
- exit 1 
-
- } 
+ invalid_key () {
+[[ -e $HOME/lista-arq ]] && list_fix="$(cat < $HOME/lista-arq)" || list_fix=''
+echo -e ' '
+msg -bar 
+#echo -e "\033[41m     --      SISTEMA ACTUAL $(lsb_release -si) $(lsb_release -sr)      --"
+echo -e " \033[41m-- CPU :$(lscpu | grep "Vendor ID" | awk '{print $3}') SISTEMA : $(lsb_release -si) $(lsb_release -sr) --"
+[[ "$list_fix" = "" ]] && {
+msg -bar 
+echo -e " ERROR (PORT 8888 TCP) ENTRE GENERADOR <--> VPS "
+echo -e "    NO EXISTE CONEXION ENTRE EL GENERADOR "
+echo -e "  - \e[3;32mGENERADOR O KEYGEN COLAPZADO\e[0m - "
+}
+[[ "$list_fix" = "KEY INVALIDA!" ]] && {
+IiP="$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
+cheklist="$(curl -sSL $IiP:81/ChumoGH/checkIP.log)"
+chekIP="$(echo -e "$cheklist" | grep ${Key} | awk '{print $3}')"
+chekDATE="$(echo -e "$cheklist" | grep ${Key} | awk '{print $7}')"
+msg -bar
+echo ""
+[[ ! -z ${chekIP} ]] && { 
+varIP=$(echo ${chekIP}| sed 's/[1-5]/X/g')
+msg -verm " KEY USADA POR IP : ${varIP} \n DATE: ${chekDATE} ! "
+echo ""
+msg -bar
+} || {
+echo -e "    PRUEBA COPIAR BIEN TU KEY "
+[[ $(echo "$(ofus "$Key"|cut -d'/' -f2)" | wc -c ) = 18 ]] && echo -e "" || echo -e "\033[1;31m CONTENIDO DE LA KEY ES INCORRECTO"
+echo -e "   KEY NO COINCIDE CON EL CODEX DEL ADM "
+msg -bar
+tput cuu1 && tput dl1
+}
+}
 
  while [[ ! $Key ]]; do 
 
