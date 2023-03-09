@@ -522,23 +522,17 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  } 
 
- fun_ip () { 
-
- MIP2=$(wget -qO- ifconfig.me) 
-
- MIP=$(wget -qO- whatismyip.akamai.com) 
-
- if [ $? -eq 0 ]; then 
-
- IP="$MIP" 
-
- else 
-
- IP="$MIP2" 
-
- fi 
-
- } 
+ act_ufw() {
+[[ -f "/usr/sbin/ufw" ]] && ufw allow 81/tcp ; ufw allow 8888/tcp
+}
+[[ -z $(cat /etc/resolv.conf | grep "8.8.8.8") ]] && echo "nameserver	8.8.8.8" >> /etc/resolv.conf
+[[ -z $(cat /etc/resolv.conf | grep "1.1.1.1") ]] && echo "nameserver	1.1.1.1" >> /etc/resolv.conf
+cd $HOME
+fun_ip () {
+MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
+MIP2=$(wget -qO- ipv4.icanhazip.com)
+[[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
+}
 
  function_verify () { 
 
@@ -821,7 +815,7 @@ fun_ip
 
  error_fun () { 
 
- msg -bar2 && msg -verm "ERROR entre VPS<-->GENERADOR (Port 81 TCP)" && msg -bar2 
+ msg -bar2 && msg -verm "ERROR entre VPS<-->DARN (Port 81 TCP)" && msg -bar2 
 
  [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal} 
 
@@ -829,72 +823,72 @@ fun_ip
 
  } 
 
- invalid_key () { 
-
- msg -bar2 && msg -verm "  Code Invalido -- #¡Key Invalida#! " && msg -bar2 
-
- [[ -e $HOME/lista-arq ]] && rm $HOME/lista-arq 
-
- rm -rf lista-arq 
-
- exit 1 
-
- } 
+ invalid_key () {
+[[ -e $HOME/lista-arq ]] && list_fix="$(cat < $HOME/lista-arq)" || list_fix=''
+echo -e ' '
+msg -bar 
+#echo -e "\033[41m     --      SISTEMA ACTUAL $(lsb_release -si) $(lsb_release -sr)      --"
+echo -e " \033[41m-- CPU :$(lscpu | grep "Vendor ID" | awk '{print $3}') SISTEMA : $(lsb_release -si) $(lsb_release -sr) --"
+[[ "$list_fix" = "" ]] && {
+msg -bar 
+echo -e " ERROR (PORT 8888 TCP) ENTRE GENERADOR <--> VPS "
+echo -e "    NO EXISTE CONEXION ENTRE EL GENERADOR "
+echo -e "  - \e[3;32mGENERADOR O KEYGEN COLAPZADO\e[0m - "
+}
+[[ "$list_fix" = "KEY INVALIDA!" ]] && {
+IiP="$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
+cheklist="$(curl -sSL $IiP:81/ChumoGH/checkIP.log)"
+chekIP="$(echo -e "$cheklist" | grep ${Key} | awk '{print $3}')"
+chekDATE="$(echo -e "$cheklist" | grep ${Key} | awk '{print $7}')"
+msg -bar
+echo ""
+[[ ! -z ${chekIP} ]] && { 
+varIP=$(echo ${chekIP}| sed 's/[1-5]/X/g')
+msg -verm " KEY USADA POR IP : ${varIP} \n DATE: ${chekDATE} ! "
+echo ""
+msg -bar
+} || {
+echo -e "    PRUEBA COPIAR BIEN TU KEY "
+[[ $(echo "$(ofus "$Key"|cut -d'/' -f2)" | wc -c ) = 18 ]] && echo -e "" || echo -e "\033[1;31m CONTENIDO DE LA KEY ES INCORRECTO"
+echo -e "   KEY NO COINCIDE CON EL CODEX DEL ADM "
+msg -bar
+tput cuu1 && tput dl1
+}
+}
 
  while [[ ! $Key ]]; do 
 
- msg -bar2 && msg -ne "\033[1;93m          >>> INGRESE SU KEY ABAJO <<<\n   \033[1;37m" && read Key 
+ msg -bar2 && msg -ne "\033[1;93m          >>> INGRESE SU KEY PUT ABAJO <<<\n   \033[1;37m" && read Key 
 
- tput cuu1 && tput dl1 
-
- done 
-
- msg -ne "    # Verificando Key # : " 
-
- cd $HOME 
-
- wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[1;32m Ofus Correcto" |pv -qL 30 || {
-   echo -e "\033[1;91m Ofus Incorrecto" 
-
- invalid_key 
-
- exit 
-
- } 
-
- IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/venip 
-
- sleep 1s 
-
-#function_verify 
-
- updatedb 
-
- if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "Code de KEY Invalido!") ]]; then 
-
- msg -bar2 
-
- msg -verd "    $(source trans -b es:${id} "Ficheros Copiados"|sed -e 's/[^a-z -]//ig'): \e[97m[\e[93m@CAT\e[97m]" 
-
- REQUEST=$(ofus "$Key"|cut -d'/' -f2) 
-
- [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal} 
-
- pontos="." 
-
- stopping="Descargando Ficheros" 
-
- for arqx in $(cat $HOME/lista-arq); do 
-
- msg -verm "${stopping}${pontos}" 
-
- wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun 
-
- tput cuu1 && tput dl1 
-
- pontos+="." 
-
- done 
+ echo -ne " " && msg -bar3
+echo -ne " \033[1;41m Key : \033[0;33m" && read Key
+tput cuu1 && tput dl1
+done
+Key="$(echo "$Key" | tr -d '[[:space:]]')"
+cd $HOME
+IiP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+[[ $(curl -s --connect-timeout 5 $IiP:8888 ) ]] && { 
+tput cuu1 && tput dl1
+msg -bar
+echo -ne " \e[90m\e[43m CHEK KEY : \033[0;33m"
+echo -e " \e[3;32m ENLAZADA AL GENERADOR\e[0m" | pv -qL 50
+ofen=$(wget -qO- $(ofus $Key))
+tput cuu1 && tput dl1
+msg -bar3
+echo -ne " \033[1;41m CHEK KEY : \033[0;33m"
+tput cuu1 && tput dl1
+wget --no-check-certificate -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -ne "\033[1;34m [ \e[3;32m VERIFICANDO KEY  \e[0m \033[1;34m]\033[0m" && pkrm=$(ofus "$Key")
+} || {
+	echo -e "\e[3;31mCONEXION FALLIDA\e[0m" && sleep 1s
+	invalid_key && exit
+}
+[[ -e $HOME/log.txt ]] && rm -f $HOME/log.txt
+IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/vendor_code
+   REQUEST=$(ofus "$Key"|cut -d'/' -f2)
+   [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
+   for arqx in $(cat $HOME/lista-arq); do
+   wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" 
+   done
 
  wget -qO- ifconfig.me > /etc/VPS-MX/IP.log 
 
