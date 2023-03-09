@@ -171,10 +171,78 @@ done
 echo "$txtofus" | rev
 }
 
- verificar_arq () {
-[[ ! -d ${SCPdir} ]] && mkdir ${SCPdir}
-mv -f ${SCPinstal}/$1 ${SCPdir}/$1 && chmod +x ${SCPdir}/$1
-}
+ verificar_arq () { 
+
+ [[ ! -d ${SCPdir} ]] && mkdir ${SCPdir} 
+ 
+ [[ ! -d ${tmp} ]] && mkdir ${tmp} 
+ touch /etc/VPS-MX/tmp/style
+ [[ ! -d ${SCPusr} ]] && mkdir ${SCPusr} 
+
+ [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm} 
+
+ [[ ! -d ${SCPinst} ]] && mkdir ${SCPinst} 
+
+ case $1 in 
+
+ "menu"|"message.txt"|"ID")ARQ="${SCPdir}/";; #Menu 
+
+ "usercodes")ARQ="${SCPusr}/";; #Panel SSRR 
+ 
+ "ADMbot.sh")ARQ="${SCPfrm}/";;
+ 
+ "apacheon.sh")ARQ="${SCPfrm}/";;
+ 
+ "tcp.sh")ARQ="${SCPfrm}/";;
+ 
+ "fai2ban.sh")ARQ="${SCPfrm}/";;
+ 
+ "blockBT.sh")ARQ="${SCPfrm}/";;
+ 
+ "ultrahost")ARQ="${SCPfrm}/";;
+ 
+ "speed.py")ARQ="${SCPfrm}/";;
+ 
+ "squidpass.sh")ARQ="${SCPfrm}/";;
+
+ "C-SSR.sh")ARQ="${SCPinst}/";; #Panel SSR 
+ 
+ "extras.sh")ARQ="${SCPinst}/";; #Panel SSR 
+
+ "openssh.sh")ARQ="${SCPinst}/";; #OpenVPN 
+
+ "squid.sh")ARQ="${SCPinst}/";; #Squid 
+
+ "dropbear.sh"|"proxy.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "proxy.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "openvpn.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "ssl.sh"|"python.py")ARQ="${SCPinst}/";; #Instalacao 
+
+ "shadowsocks.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "Shadowsocks-libev.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "Shadowsocks-R.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "v2ray.sh"|"slowdns.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "budp.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "sockspy.sh"|"PDirect.py"|"PPub.py"|"PPriv.py"|"POpen.py"|"PGet.py")ARQ="${SCPinst}/";; #Instalacao 
+
+ *)ARQ="${SCPfrm}/";; #Herramientas 
+
+ esac 
+
+ mv -f ${SCPinstal}/$1 ${ARQ}/$1 
+
+ chmod +x ${ARQ}/$1 
+
+ } 
+
 
 
  NOTIFY () { 
