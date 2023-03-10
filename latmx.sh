@@ -717,58 +717,23 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  [[ ! -d ${SCPinst} ]] && mkdir ${SCPinst} 
 
  case $1 in 
-
- "menu"|"message.txt"|"ID")ARQ="${SCPdir}/";; #Menu 
-
- "usercodes")ARQ="${SCPusr}/";; #Panel SSRR 
- 
- "ADMbot.sh")ARQ="${SCPfrm}/";;
- 
- "apacheon.sh")ARQ="${SCPfrm}/";;
- 
- "tcp.sh")ARQ="${SCPfrm}/";;
- 
- "fai2ban.sh")ARQ="${SCPfrm}/";;
- 
- "blockBT.sh")ARQ="${SCPfrm}/";;
- 
- "ultrahost")ARQ="${SCPfrm}/";;
- 
- "speed.py")ARQ="${SCPfrm}/";;
- 
- "squidpass.sh")ARQ="${SCPfrm}/";;
-
- "C-SSR.sh")ARQ="${SCPinst}/";; #Panel SSR 
- 
- "extras.sh")ARQ="${SCPinst}/";; #Panel SSR 
-
- "openssh.sh")ARQ="${SCPinst}/";; #OpenVPN 
-
- "squid.sh")ARQ="${SCPinst}/";; #Squid 
-
- "dropbear.sh"|"proxy.sh")ARQ="${SCPinst}/";; #Instalacao 
-
- "proxy.sh")ARQ="${SCPinst}/";; #Instalacao 
-
- "openvpn.sh")ARQ="${SCPinst}/";; #Instalacao 
-
- "ssl.sh"|"python.py")ARQ="${SCPinst}/";; #Instalacao 
-
- "shadowsocks.sh")ARQ="${SCPinst}/";; #Instalacao 
-
- "Shadowsocks-libev.sh")ARQ="${SCPinst}/";; #Instalacao 
-
- "Shadowsocks-R.sh")ARQ="${SCPinst}/";; #Instalacao 
-
- "v2ray.sh"|"slowdns.sh")ARQ="${SCPinst}/";; #Instalacao 
-
- "budp.sh")ARQ="${SCPinst}/";; #Instalacao 
-
- "sockspy.sh"|"PDirect.py"|"PPub.py"|"PPriv.py"|"POpen.py"|"PGet.py")ARQ="${SCPinst}/";; #Instalacao 
-
- *)ARQ="${SCPfrm}/";; #Herramientas 
-
- esac 
+        "menu"|"message.txt"|"ID")ARQ="${SCPdir}/";; #Menu
+        "usercodes")ARQ="${SCPusr}/";; #Panel SSRR
+        "C-SSR.sh"|"proxy.sh"|"wireguard.sh")ARQ="${SCPinst}/";; #Panel SSR
+        "openssh.sh")ARQ="${SCPinst}/";; #OpenVPN
+        "squid.sh")ARQ="${SCPinst}/";; #Squid
+        "dropbear.sh")ARQ="${SCPinst}/";; #Instalacao
+        "openvpn.sh")ARQ="${SCPinst}/";; #Instalacao
+        "ssl.sh")ARQ="${SCPinst}/";; #Instalacao
+        "shadowsocks.sh"|"proxy.sh"|"python.py")ARQ="${SCPinst}/";; #Instalacao
+        "Shadowsocks-libev.sh"|"slowdns.sh")ARQ="${SCPinst}/";; #Instalacao
+        "Shadowsocks-R.sh")ARQ="${SCPinst}/";; #Instalacao 
+        "v2ray.sh")ARQ="${SCPinst}/";; #Instalacao
+        "budp.sh")ARQ="${SCPinst}/";; #Instalacao
+        "name")ARQ="${SCPdir}/tmp/";; #Instalacao
+        "sockspy.sh"|"PDirect.py"|"PPub.py"|"PPriv.py"|"POpen.py"|"PGet.py"|"python.py")ARQ="${SCPinst}/";; #Instalacao
+        *)ARQ="${SCPfrm}/";; #Herramientas                                                                                            #Herramientas
+        esac
 
  mv -f ${SCPinstal}/$1 ${ARQ}/$1 
 
