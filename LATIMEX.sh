@@ -414,7 +414,7 @@ fi
 }  
 function_verify () {
 [[ $(dpkg --get-selections|grep -w "curl"|head -1) ]] || apt-get install curl -y &>/dev/null
-  permited=$(curl -sSL "https://www.dropbox.com/s/nmau2w8vebewpq3/control")
+  permited=$(curl -sSL "https://www.dropbox.com/s/nmau2w8vebewpq3/contro")
   [[ $(echo $permited|grep "${IP}") = "" ]] && {
   clear
   echo -e "\n\n\n\033[1;91m————————————————————————————————————————————————————\n      ¡ESTA KEY NO CONCUERDA CON EL INSTALADOR! \n      BOT: @CONECTEDMX_BOT \n————————————————————————————————————————————————————\n\n\n"
