@@ -493,15 +493,15 @@
 
  sleep 7s 
 
- export LANGUAGE=en_US.UTF-8\ 
- && export LANG=en_US.UTF-8\ 
- && export LC_ALL=en_US.UTF-8 \  
- && export LC_CTYPE="en_US.UTF-8"\ 
- && locale-gen en_US.UTF-8\ 
- && sudo apt-get -y install language-pack-en-base\ 
- && sudo dpkg-reconfigure locales 
- clear 
- } 
+ #export LANGUAGE=en_US.UTF-8\ 
+ #&& export LANG=en_US.UTF-8\ 
+ #&& export LC_ALL=en_US.UTF-8 \  
+ #&& export LC_CTYPE="en_US.UTF-8"\ 
+ #&& locale-gen en_US.UTF-8\ 
+ #&& sudo apt-get -y install language-pack-en-base\ 
+ #&& sudo dpkg-reconfigure locales 
+ #clear 
+ #} 
 
  clear 
 
