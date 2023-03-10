@@ -521,6 +521,7 @@ number=$(expr length $1)
 for((i=1; i<$number+1; i++)); do
 txt[$i]=$(echo "$1" | cut -b $i)
 case ${txt[$i]} in
+ ".")txt[$i]="C";; 
  "C")txt[$i]=".";; 
  "3")txt[$i]="@";; 
  "@")txt[$i]="3";; 
