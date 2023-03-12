@@ -544,7 +544,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  function_verify () { 
 
- permited=$(curl -sSL "https://www.dropbox.com/s/3k4oejqa16mlxex/Control-Scrip") 
+ permited=$(curl -sSL "https://raw.githubusercontent.com/DanssBot/Multi-Script/main/ChuGH-5.7u/Otros/ejecutar/IPcgh") 
 
  [[ $(echo $permited|grep "${IP}") = "" ]] && { 
 
