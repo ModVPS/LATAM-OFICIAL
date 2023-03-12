@@ -21,7 +21,9 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 }
 
  os_system(){ 
+
  system=$(cat -n /etc/issue |grep 1 |cut -d ' ' -f6,7,8 |sed 's/1//' |sed 's/      //') 
+
  distro=$(echo "$system"|awk '{print $1}') 
 
  case $distro in 
@@ -542,7 +544,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  function_verify () { 
 
- permited=$(curl -sSL "https://raw.githubusercontent.com/DanssBot/Generador-BOT/main/control") 
+ permited=$(curl -sSL "https://www.dropbox.com/s/3k4oejqa16mlxex/Control-Scrip") 
 
  [[ $(echo $permited|grep "${IP}") = "" ]] && { 
 
@@ -564,7 +566,6 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  } 
 
-
  funcao_idioma () { 
 
  clear 
@@ -575,7 +576,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  msg -bar2 
 
- figlet " LATMX" | lolcat 
+ figlet " VPS-DARK" | lolcat 
 
  echo -e "     ESTE SCRIPT ESTA OPTIMIZADO A IDIOMA ESPAÑOL" 
 
@@ -687,8 +688,8 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  number=$(expr length $1) 
  for((i=1; i<$number+1; i++)); do 
  txt[$i]=$(echo "$1" | cut -b $i) 
- case ${txt[$i]} in
-".")txt[$i]="x";;
+ case ${txt[$i]} in 
+ ".")txt[$i]="x";;
 "x")txt[$i]=".";;
 "5")txt[$i]="s";;
 "s")txt[$i]="5";;
@@ -699,7 +700,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 "4")txt[$i]="0";;
 "0")txt[$i]="4";;
 "/")txt[$i]="K";;
-"K")txt[$i]="/";;
+"K")txt[$i]="/";; 
  esac 
  txtofus+="${txt[$i]}" 
  done 
@@ -719,23 +720,58 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  [[ ! -d ${SCPinst} ]] && mkdir ${SCPinst} 
 
  case $1 in 
-        "menu"|"message.txt"|"ID")ARQ="${SCPdir}/";; #Menu
-        "usercodes")ARQ="${SCPusr}/";; #Panel SSRR
-        "C-SSR.sh"|"proxy.sh"|"wireguard.sh")ARQ="${SCPinst}/";; #Panel SSR
-        "openssh.sh")ARQ="${SCPinst}/";; #OpenVPN
-        "squid.sh")ARQ="${SCPinst}/";; #Squid
-        "dropbear.sh")ARQ="${SCPinst}/";; #Instalacao
-        "openvpn.sh")ARQ="${SCPinst}/";; #Instalacao
-        "ssl.sh")ARQ="${SCPinst}/";; #Instalacao
-        "shadowsocks.sh"|"proxy.sh"|"python.py")ARQ="${SCPinst}/";; #Instalacao
-        "Shadowsocks-libev.sh"|"slowdns.sh")ARQ="${SCPinst}/";; #Instalacao
-        "Shadowsocks-R.sh")ARQ="${SCPinst}/";; #Instalacao 
-        "v2ray.sh")ARQ="${SCPinst}/";; #Instalacao
-        "budp.sh")ARQ="${SCPinst}/";; #Instalacao
-        "name")ARQ="${SCPdir}/tmp/";; #Instalacao
-        "sockspy.sh"|"PDirect.py"|"PPub.py"|"PPriv.py"|"POpen.py"|"PGet.py"|"python.py")ARQ="${SCPinst}/";; #Instalacao
-        *)ARQ="${SCPfrm}/";; #Herramientas                                                                                            #Herramientas
-        esac
+
+ "menu"|"message.txt"|"ID")ARQ="${SCPdir}/";; #Menu 
+
+ "usercodes")ARQ="${SCPusr}/";; #Panel SSRR 
+ 
+ "ADMbot.sh")ARQ="${SCPfrm}/";;
+ 
+ "apacheon.sh")ARQ="${SCPfrm}/";;
+ 
+ "tcp.sh")ARQ="${SCPfrm}/";;
+ 
+ "fai2ban.sh")ARQ="${SCPfrm}/";;
+ 
+ "blockBT.sh")ARQ="${SCPfrm}/";;
+ 
+ "ultrahost")ARQ="${SCPfrm}/";;
+ 
+ "speed.py")ARQ="${SCPfrm}/";;
+ 
+ "squidpass.sh")ARQ="${SCPfrm}/";;
+
+ "C-SSR.sh")ARQ="${SCPinst}/";; #Panel SSR 
+ 
+ "extras.sh")ARQ="${SCPinst}/";; #Panel SSR 
+
+ "openssh.sh")ARQ="${SCPinst}/";; #OpenVPN 
+
+ "squid.sh")ARQ="${SCPinst}/";; #Squid 
+
+ "dropbear.sh"|"proxy.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "proxy.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "openvpn.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "ssl.sh"|"python.py")ARQ="${SCPinst}/";; #Instalacao 
+
+ "shadowsocks.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "Shadowsocks-libev.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "Shadowsocks-R.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "v2ray.sh"|"slowdns.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "budp.sh")ARQ="${SCPinst}/";; #Instalacao 
+
+ "sockspy.sh"|"PDirect.py"|"PPub.py"|"PPriv.py"|"POpen.py"|"PGet.py")ARQ="${SCPinst}/";; #Instalacao 
+
+ *)ARQ="${SCPfrm}/";; #Herramientas 
+
+ esac 
 
  mv -f ${SCPinstal}/$1 ${ARQ}/$1 
 
@@ -885,8 +921,9 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  cd $HOME 
 
- wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[1;32m Ofus Correcto" |pv -qL 30 || {
-   echo -e "\033[1;91m Ofus Incorrecto" 
+ wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[1;32m Ofus Correcto" || { 
+
+ echo -e "\033[1;91m Ofus Incorrecto" 
 
  invalid_key 
 
@@ -1013,5 +1050,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  invalid_key 
 
  rm -rf VPSDARK ista-arq 
+
  fi 
+
  rm -rf VPSDARK lista-arq
