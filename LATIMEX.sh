@@ -718,19 +718,6 @@ fi
    msg -bar2
    [[ ${byinst} = "true" ]] && install_fim
    
-
-   REBOOT=1
-REBOOT_TIMEOUT=10
-if [ "$REBOOT" = "1" ]; then
-echo -e "	\e[1;97m\e[1;100mREINICIANDO VPS EN 10 SEGUNDOS\e[0m"
-while [ $REBOOT_TIMEOUT -gt 0 ]; do
-msg -ne "	-$REBOOT_TIMEOUT-\r"
-sleep 1
-: $((REBOOT_TIMEOUT--))
-done
-rm -rf LACASITA.sh lista-arq
-reboot
-fi
 else
 invalid_key
 rm -rf LACASITA.sh lista-arq
