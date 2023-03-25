@@ -233,7 +233,7 @@ Install_key() {
   Filotros="${SCPdir}/temp"
   IP=$(cat /root/.ssh/authrized_key.reg)
   function_verify() {
-    permited=$(curl -sSL "https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Control-IP")
+    permited=$(curl -sSL "https://raw.githubusercontent.com/cisdan/latam/main/Control-Scrip")
     [[ $(echo $permited | grep "${IP}") = "" ]] && {
       clear && clear
       echo -e "\n\n\n\033[1;91m————————————————————————————————————————————————————\n      ¡ESTA KEY NO CONCUERDA CON EL INSTALADOR! \n                 CONATACTE A @Kalix1\n————————————————————————————————————————————————————\n\n\n"
