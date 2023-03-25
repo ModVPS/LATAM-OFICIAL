@@ -153,7 +153,7 @@ password required pam_permit.so' >/etc/pam.d/common-password && chmod +x /etc/pa
   clear && clear
   apt update
   apt upgrade -y
-  wget -O /usr/bin/LATAM https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Instalador/LATAM  &>/dev/null
+  wget -O /usr/bin/LATAM https://raw.githubusercontent.com/cisdan/latam/main/LATAM  &>/dev/null
   chmod +x /usr/bin/LATAM
 }
 
@@ -225,7 +225,7 @@ instalador_final() {
   tput cuu1 && tput dl1
   echo -e "     \033[1;4;32mLA KEY ES VALIDA FINALIZANDO INSTALACION \033[0;39m"
   ##-->> ACOPLANDO INSTALL EN /BIN
-  wget /root/LATAM https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Instalador/LATAM -O /usr/bin/LATAM &>/dev/null
+  wget /root/LATAM https://raw.githubusercontent.com/cisdan/latam/main/LATAM -O /usr/bin/LATAM &>/dev/null
   chmod +x /usr/bin/LATAM
   ##-->> LIMPIAR BASHRC
   /bin/cp /etc/skel/.bashrc ~/
@@ -338,7 +338,7 @@ check_key() {
   echo -e "\033[1;32m————————————————————————————————————————————————————"
   msgi -bar2
   echo -ne "\033[1;96m          >>> INTRODUZCA LA KEY ABAJO <<<\n\033[1;31m        " && read Key
-  respuesta=$(curl -s --data "clave=$Key" http://155.138.245.13:81/CheckPHP/CheckKey.php)
+  respuesta=$(curl -s --data "clave=$Key" https://raw.githubusercontent.com/cisdan/latam/main/Control-Scrip)
   # Verificar la respuesta del servidor Apache
   if [ "$respuesta" = "clave_valida" ]; then
     instalador_final
