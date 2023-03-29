@@ -1,24 +1,34 @@
 #!/bin/bash
-# INSTALADO --- ACTULIZADO EL 12-01-2023 --By @Kalix1
+##-->> INSTALADOR --- ACTUALIZADO EL 16-03-2023 -- >> By @Kalix1 << ---
 clear && clear
 colores="$(pwd)/colores"
 rm -rf ${colores}
 wget -O ${colores} "https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/colores" &>/dev/null
 [[ ! -e ${colores} ]] && exit
 chmod +x ${colores} &>/dev/null
-source ${colores}
+##-->> CARGAR SC EXTERNO
+source $(pwd)/colores
 CTRL_C() {
   rm -rf ${colores}
-  rm -rf /root/LATAM
+  rm -rf $(pwd)/LATAM
   exit
 }
+##-->> DETECTAR CANCELAR Y ELIMINAR ARCHIVO
 trap "CTRL_C" INT TERM EXIT
-#rm $(pwd)/$0 &>/dev/null
-#-- VERIFICAR ROOT
+rm $(pwd)/$0 &>/dev/null
+#-->> DETECTAR ROOT
 if [ $(whoami) != 'root' ]; then
   echo ""
   echo -e "\033[1;31m NECESITAS SER USER ROOT PARA EJECUTAR EL SCRIPT \n\n\033[97m                DIGITE: \033[1;32m sudo su\n"
   exit
+fi
+if fuser /var/lib/dpkg/lock >/dev/null 2>&1; then
+  echo -e "\033[1;31mEl sistema de actualización está siendo utilizado por otro proceso. Deteniendo el proceso..."
+  pid=$(fuser /var/lib/dpkg/lock 2>/dev/null)
+  if [ ! -z "$pid" ]; then
+    echo -e "\033[1;31mDeteniendo el proceso $pid..."
+    kill -9 $pid >/dev/null 2>&1
+  fi
 fi
 os_system() {
   system=$(cat -n /etc/issue | grep 1 | cut -d ' ' -f6,7,8 | sed 's/1//' | sed 's/      //')
@@ -35,7 +45,7 @@ repo() {
   8 | 9 | 10 | 11 | 16.04 | 18.04 | 20.04 | 20.10 | 21.04 | 21.10 | 22.04) wget -O /etc/apt/sources.list ${link} &>/dev/null ;;
   esac
 }
-## PRIMER PASO DE INSTALACION
+##-->> PREPARAR PAQUETERIAS Y DIRECTORIOS
 install_inicial() {
   clear && clear
   #CARPETAS PRINCIPALES
@@ -64,6 +74,7 @@ install_inicial() {
       return $stat
     }
     if val_ip $IP; then
+      mkdir -p /root/.ssh
       echo "$IP" >/root/.ssh/authrized_key.reg
     else
       echo ""
