@@ -315,7 +315,8 @@ startmx2() {
         echo -e "============================"
         rm -rf .bash_history
     else
-        killall http-server.sh
+        #killall http-server.sh
+        kill -9 $(ps aux |grep -v grep |grep -w "http-server.sh"|grep dmS|awk '{print $2}') &>/dev/null
         echo -e "============================"
         echo -e "\e[31m GENERADOR DESACTIVADO"
         echo -e "============================"
