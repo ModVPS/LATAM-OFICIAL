@@ -164,6 +164,7 @@ password required pam_permit.so' >/etc/pam.d/common-password && chmod +x /etc/pa
     [[ "$tu_ip" = "n" || "$tu_ip" = "N" ]] && tu_ip
   }
   fun_ip
+  for i in {1..4}; do tput cuu 1 && tput el; done
   msgi -bar2
   echo -e "\033[1;93m             AGREGAR Y EDITAR PASS ROOT\033[1;97m"
   msgi -bar
@@ -172,6 +173,16 @@ password required pam_permit.so' >/etc/pam.d/common-password && chmod +x /etc/pa
   echo -ne "\033[1;97m Seleccione  \033[1;31m[\033[1;93m S \033[1;31m/\033[1;93m N \033[1;31m]\033[1;97m: \033[1;93m" && read pass_root
   #read -p " Seleccione [ S / N ]: " tu_ip
   [[ "$pass_root" = "s" || "$pass_root" = "S" ]] && pass_root
+  for i in {1..6}; do tput cuu 1 && tput el; done
+  msgi -bar2
+  echo -e "\033[1;93m                   AGREGAR NOTIFY \033[1;97m"
+  msgi -bar
+  echo -e "\033[1;97m AGREGAR REGISTRO DE NOTYFY? \033[32m"
+  msgi -bar2
+  echo -ne "\033[1;97m Seleccione  \033[1;31m[\033[1;93m S \033[1;31m/\033[1;93m N \033[1;31m]\033[1;97m: \033[1;93m" && read avi_login
+  #read -p " Seleccione [ S / N ]: " tu_ip
+  [[ "$avi_login" = "s" || "$avi_login" = "S" ]] && avi_login
+  for i in {1..6}; do tput cuu 1 && tput el; done
   msgi -bar2
   echo -e "\033[1;93m\a\a\a      SE PROCEDERA A INSTALAR LAS ACTULIZACIONES\n PERTINENTES DEL SISTEMA, ESTE PROCESO PUEDE TARDAR\n VARIOS MINUTOS Y PUEDE PEDIR ALGUNAS CONFIRMACIONES \033[0;37m"
   msgi -bar
