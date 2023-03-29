@@ -32,11 +32,11 @@ unistall() {
     rm -rf ${dir}
     echo "DETENIENDO EL PROCESO DEL BOT"
     sleep 2s
-    killall BotGen.sh
+    #killall BotGen.sh
     kill -9 $(ps aux | grep -v grep | grep -w "BotGen.sh" | grep dmS | awk '{print $2}') &>/dev/null
     kill $(ps aux | grep -v grep | grep -w "BotGen.sh") &>/dev/null
 
-    killall http-server.sh
+    #killall http-server.sh
     rm -rf /bin/http-server.sh
     rm -rf /bin/ShellBot.sh
     rm -rf /bin/vpsbot
