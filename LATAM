@@ -190,7 +190,7 @@ password required pam_permit.so' >/etc/pam.d/common-password && chmod +x /etc/pa
   clear && clear
   apt update
   apt upgrade -y
-  wget /root/LATAM https://raw.githubusercontent.com/cisdan/latam/main/LATAM -O /usr/bin/LATAM &>/dev/null
+  wget /root/LATAM https://raw.githubusercontent.com/ModVPS/LATAM-OFICIAL/main/LATAM -O /usr/bin/LATAM &>/dev/null
   chmod +x /usr/bin/LATAM
 }
 
@@ -217,7 +217,7 @@ time_reboot() {
 dependencias() {
   dpkg --configure -a >/dev/null 2>&1
   apt -f install -y >/dev/null 2>&1
-  packages="zip unzip python python3 python3-pip openssl iptables lsof pv boxes at mlocate gawk bc jq npm nodejs socat net-tools cowsay figlet lolcat"
+  packages="zip unzip screen python python3 python3-pip openssl iptables lsof pv boxes at mlocate gawk bc jq npm nodejs socat net-tools cowsay figlet lolcat"
   for i in $packages; do
     paquete="$i"
     echo -e "\033[1;97m        INSTALANDO PAQUETE \e[93m >>> \e[36m $i"
@@ -260,7 +260,7 @@ done
 
 ## PASO DOS
 Install_key() {
-  wget /root/LATAM https://raw.githubusercontent.com/cisdan/latam/main/LATAM -O /usr/bin/LATAM &>/dev/null
+  wget /root/LATAM https://raw.githubusercontent.com/ModVPS/LATAM-OFICIAL/main/LATAM -O /usr/bin/LATAM &>/dev/null
   chmod +x /usr/bin/LATAM
   /bin/cp /etc/skel/.bashrc ~/
   clear && clear
