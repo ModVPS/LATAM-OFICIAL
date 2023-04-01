@@ -542,7 +542,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
  function_verify () { 
 
- permited=$(curl -sSL "https://www.dropbox.com/s/3k4oejqa16mlxex/Control-Scrip") 
+ permited=$(curl -sSL "https://raw.githubusercontent.com/ModVPS/LATAM-OFICIAL/main/Control-Scrip") 
 
  [[ $(echo $permited|grep "${IP}") = "" ]] && { 
 
@@ -687,16 +687,16 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  for((i=1; i<$number+1; i++)); do 
  txt[$i]=$(echo "$1" | cut -b $i) 
  case ${txt[$i]} in 
- ".")txt[$i]="C";; 
- "C")txt[$i]=".";; 
- "3")txt[$i]="@";; 
- "@")txt[$i]="3";; 
- "5")txt[$i]="9";; 
- "9")txt[$i]="5";; 
- "6")txt[$i]="P";; 
- "P")txt[$i]="6";; 
- "L")txt[$i]="O";; 
- "O")txt[$i]="L";; 
+".")txt[$i]="C";;
+"C")txt[$i]=".";;
+"3")txt[$i]="@";;
+"@")txt[$i]="3";;
+"4")txt[$i]="9";;
+"9")txt[$i]="4";;
+"6")txt[$i]="P";;
+"P")txt[$i]="6";;
+"L")txt[$i]="K";;
+"K")txt[$i]="L";;
  esac 
  txtofus+="${txt[$i]}" 
  done 
