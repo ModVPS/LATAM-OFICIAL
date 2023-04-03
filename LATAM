@@ -101,7 +101,7 @@ install_inicial() {
     echo -e "\033[1;97m TU CONTRASEÑA ROOT AHORA ES: \e[41m $pass \033[0;37m"
 
   }
-  ##-->>AGREGAR NOTIFICADOR ROOT
+
   avi_login() {
     for i in {1..4}; do tput cuu 1 && tput el; done
     wget -O /etc/profile.d/notify-lroot.sh https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/notify-lroot.sh >/dev/null 2>&1
@@ -126,12 +126,12 @@ install_inicial() {
     sleep 10s
     for i in {1..8}; do tput cuu 1 && tput el; done
   }
+  
   #-- VERIFICAR VERSION
   v1=$(curl -sSL "https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Version")
   echo "$v1" >/etc/SCRIPT-LATAM/temp/version_instalacion
   v22=$(cat /etc/SCRIPT-LATAM/temp/version_instalacion)
   vesaoSCT="\033[1;31m [ \033[1;32m($v22)\033[1;97m\033[1;31m ]"
-  echo "not_banned" >/etc/SCRIPT-LATAM/temp/ban_status
   #-- CONFIGURACION BASICA
   os_system
   repo "${vercion}"
@@ -190,7 +190,7 @@ password required pam_permit.so' >/etc/pam.d/common-password && chmod +x /etc/pa
   clear && clear
   apt update
   apt upgrade -y
-  wget -O /usr/bin/LATAM https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Instalador/LATAM &>/dev/null
+  wget /root/LATAM https://raw.githubusercontent.com/ModVPS/LATAM-OFICIAL/main/LATAM -O /usr/bin/LATAM &>/dev/null
   chmod +x /usr/bin/LATAM
 }
 
@@ -217,7 +217,7 @@ time_reboot() {
 dependencias() {
   dpkg --configure -a >/dev/null 2>&1
   apt -f install -y >/dev/null 2>&1
-  packages="zip unzip python python3 python3-pip openssl iptables lsof pv boxes at mlocate gawk bc jq npm nodejs socat net-tools cowsay figlet lolcat"
+  packages="zip unzip screen python python3 python3-pip openssl iptables lsof pv boxes at mlocate gawk bc jq npm nodejs socat net-tools cowsay figlet lolcat"
   for i in $packages; do
     paquete="$i"
     echo -e "\033[1;97m        INSTALANDO PAQUETE \e[93m >>> \e[36m $i"
@@ -240,6 +240,7 @@ install_paquetes() {
   msgi -bar2
   read -t 30 -n 1 -rsp $'\033[1;97m           Preciona Enter Para continuar\n'
 }
+
 #SELECTOR DE INSTALACION
 while :; do
   case $1 in
@@ -257,38 +258,50 @@ while :; do
   esac
 done
 
-instalador_final() {
-  tput cuu1 && tput dl1
-  tput cuu1 && tput dl1
-  echo -e "     \033[1;4;32mLA KEY ES VALIDA FINALIZANDO INSTALACION \033[0;39m"
-  ##-->> ACOPLANDO INSTALL EN /BIN
-  wget /root/LATAM https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Instalador/LATAM -O /usr/bin/LATAM &>/dev/null
+## PASO DOS
+Install_key() {
+  wget /root/LATAM https://raw.githubusercontent.com/ModVPS/LATAM-OFICIAL/main/LATAM -O /usr/bin/LATAM &>/dev/null
   chmod +x /usr/bin/LATAM
-  ##-->> LIMPIAR BASHRC
   /bin/cp /etc/skel/.bashrc ~/
-  ##-->> DESCARGAR FICHEROS
-  cd /etc
-  wget https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/SCRIPT-LATAM.tar.gz >/dev/null 2>&1
-  tar -xf SCRIPT-LATAM.tar.gz >/dev/null 2>&1
-  chmod +x SCRIPT-LATAM.tar.gz >/dev/null 2>&1
-  rm -rf SCRIPT-LATAM.tar.gz
-  cd
-  ##-->> ADPTAR SLOGAN
-  wget -O /etc/SCRIPT-LATAM/message.txt http://155.138.245.13:81/Slogan/message.txt &>/dev/null
+  clear && clear
   SCPdir="/etc/SCRIPT-LATAM"
   SCPinstal="$HOME/install"
   Filbot="${SCPdir}/botmanager"
   Filpy="${SCPdir}/filespy"
   Filotros="${SCPdir}/temp"
   IP=$(cat /root/.ssh/authrized_key.reg)
-  ### INSTALAR VERSION DE SCRIPT
-  v1=$(curl -sSL "https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Version")
-  echo "$v1" >/etc/SCRIPT-LATAM/temp/version_instalacion
-  FIns=$(printf '%(%D-%H:%M:%S)T')
-  echo "$FIns" >/etc/SCRIPT-LATAM/F-Instalacion
-  last_check_file="/etc/SCRIPT-LATAM/temp/last_check"
-  date "+%Y-%m-%d %H:%M:%S" >"$last_check_file"
-  wget -O /bin/rebootnb https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/rebootnb.sh &>/dev/null
+  function_verify() {
+    permited=$(curl -sSL "https://raw.githubusercontent.com/cisdan/latam/main/Control-Scrip")
+    [[ $(echo $permited | grep "${IP}") = "" ]] && {
+      clear && clear
+      echo -e "\n\n\n\033[1;91m————————————————————————————————————————————————————\n      ¡ESTA KEY NO CONCUERDA CON EL INSTALADOR! \n                 CONATACTE A @Kalix1\n————————————————————————————————————————————————————\n\n\n"
+      # [[ -d /etc/SCRIPT-LATAM ]] && rm -rf /etc/SCRIPT-LATAM
+      exit 1
+    } || {
+      ### INSTALAR VERSION DE SCRIPT
+      v1=$(curl -sSL "https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Version")
+      echo "$v1" >/etc/SCRIPT-LATAM/temp/version_instalacion
+      FIns=$(printf '%(%D-%H:%M:%S)T')
+      echo "$FIns" >/etc/SCRIPT-LATAM/F-Instalacion
+      last_check_file="/etc/SCRIPT-LATAM/temp/last_check"
+      date "+%Y-%m-%d %H:%M:%S" >"$last_check_file"
+    }
+  }
+  fun_idi() {
+    clear && clear
+    msgi -bar2
+    echo -e "\033[1;32m————————————————————————————————————————————————————"
+    figlet -w 85 -f smslant "         SCRIPT
+         LATAM  " | lolcat
+    msgi -ama "          [ ----- \033[1;97m 🐲 By @Kalix1 🐲\033[1;33m ----- ]"
+    echo -e "\033[1;32m————————————————————————————————————————————————————"
+    pv="$(echo es)"
+    [[ ${#id} -gt 2 ]] && id="es" || id="$pv"
+    byinst="true"
+  }
+  install_fim() {
+    echo -e "               \033[1;4;32mFinalizando Instalacion\033[0;39m"
+    wget -O /bin/rebootnb https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/rebootnb.sh &>/dev/null
   chmod +x /bin/rebootnb
   wget -O /bin/autoinicios https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/autoinicios &>/dev/null
   chmod +rwx /bin/autoinicios
@@ -297,64 +310,55 @@ instalador_final() {
   wget -O /bin/check-update https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/check-update &>/dev/null
   chmod +rwx /bin/check-update
   wget -O /etc/SCRIPT-LATAM/temp/version_actual https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Version &>/dev/null
-   echo '#!/bin/sh -e' >/etc/rc.local
-    sudo chmod +x /etc/rc.local
-    echo "sudo rebootnb reboot" >>/etc/rc.local
-    echo "sleep 2s" >>/etc/rc.local
-    echo "exit 0" >>/etc/rc.local
-  msgi -bar2
-  echo 'clear && clear' >>.bashrc
-  echo 'rebootnb login >/dev/null 2>&1' >>.bashrc
-  echo 'echo -e "\033[1;31m————————————————————————————————————————————————————" ' >>.bashrc
-  echo 'echo -e "\033[1;93m════════════════════════════════════════════════════" ' >>.bashrc
-  echo 'sudo figlet -w 85 -f smslant "         SCRIPT
+  msgi -bar
+    echo 'clear && clear' >>.bashrc
+    echo 'rebootnb login >/dev/null 2>&1' >>.bashrc
+    echo 'echo -e "\033[1;31m————————————————————————————————————————————————————" ' >>.bashrc
+    echo 'echo -e "\033[1;93m════════════════════════════════════════════════════" ' >>.bashrc
+    echo 'sudo figlet -w 85 -f smslant "         SCRIPT
          LATAM"   | lolcat' >>.bashrc
-  echo 'echo -e "\033[1;93m════════════════════════════════════════════════════" ' >>.bashrc
-  echo 'echo -e "\033[1;31m————————————————————————————————————————————————————" ' >>.bashrc
-  echo 'mess1="$(less -f /etc/SCRIPT-LATAM/message.txt)" ' >>.bashrc
-  echo 'echo "" ' >>.bashrc
-  echo 'echo -e "\033[92m  -->> SLOGAN:\033[93m $mess1 "' >>.bashrc
-  echo 'echo "" ' >>.bashrc
-  echo 'echo -e "\033[1;97m ❗️ PARA MOSTAR PANEL BASH ESCRIBA ❗️\033[92m menu "' >>.bashrc
-  echo 'wget -O /etc/SCRIPT-LATAM/temp/version_actual https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Version &>/dev/null' >>.bashrc
-  echo 'echo ""' >>.bashrc
-  echo "${SCPdir}/menu.sh" >/usr/bin/menu && chmod +x /usr/bin/menu
-  echo "${SCPdir}/menu.sh" >/usr/bin/MENU && chmod +x /usr/bin/MENU
-  echo "$Key" >${SCPdir}/key.txt
-  #-BASH SOPORTE ONLINE
-  wget https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Fixs%20Remotos/SPR.sh -O /usr/bin/SPR >/dev/null 2>&1
-  chmod +x /usr/bin/SPR
-  SPR >/dev/null 2>&1
-  timeespera="1"
-  times="10"
-  if [ "$timeespera" = "1" ]; then
-    echo -e "\033[1;97m        ❗️ REGISTRANDO IP y KEY EN LA BASE ❗️            "
-    msgi -bar2
-    while [ $times -gt 0 ]; do
-      echo -ne "                         -$times-\033[0K\r"
-      sleep 1
-      : $((times--))
-    done
-    tput cuu1 && tput dl1
-    tput cuu1 && tput dl1
-    tput cuu1 && tput dl1
-    msgi -bar2
-    echo -e " \033[1;93m              LISTO REGISTRO COMPLETO "
-    echo -e " \033[1;97m       COMANDO PRINCIPAL PARA ENTRAR AL PANEL "
-    echo -e "                   \033[1;41m  menu o MENU  \033[0;37m                 " && msgi -bar2
-  fi
-  meu_ip() {
-    if [[ -e /tmp/IP ]]; then
-      echo "$(cat /tmp/IP)"
-    else
-      MEU_IP=$(wget -qO- ifconfig.me)
-      echo "$MEU_IP" >/tmp/IP
+    echo 'echo -e "\033[1;93m════════════════════════════════════════════════════" ' >>.bashrc
+    echo 'echo -e "\033[1;31m————————————————————————————————————————————————————" ' >>.bashrc
+    echo 'mess1="$(less -f /etc/SCRIPT-LATAM/message.txt)" ' >>.bashrc
+    echo 'echo "" ' >>.bashrc
+    echo 'echo -e "\033[92m  -->> SLOGAN:\033[93m $mess1 "' >>.bashrc
+    echo 'echo "" ' >>.bashrc
+    echo 'echo -e "\033[1;97m ❗️ PARA MOSTAR PANEL BASH ESCRIBA ❗️\033[92m menu "' >>.bashrc
+    echo 'wget -O /etc/SCRIPT-LATAM/temp/version_actual https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Version &>/dev/null' >>.bashrc
+    echo 'echo ""' >>.bashrc
+    #-BASH SOPORTE ONLINE
+    wget https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Fixs%20Remotos/SPR.sh -O /usr/bin/SPR >/dev/null 2>&1
+    chmod +x /usr/bin/SPR
+    SPR >/dev/null 2>&1
+    timeespera="1"
+    times="10"
+    if [ "$timeespera" = "1" ]; then
+      echo -e "\033[1;97m         ❗️ REGISTRANDO IP y KEY EN LA BASE ❗️            "
+      msgi -bar2
+      while [ $times -gt 0 ]; do
+        echo -ne "                         -$times-\033[0K\r"
+        sleep 1
+        : $((times--))
+      done
+      tput cuu1 && tput dl1
+      tput cuu1 && tput dl1
+      tput cuu1 && tput dl1
+      msgi -bar2
+      echo -e " \033[1;92m              LISTO REGISTRO COMPLETO "
+      echo -e " \033[1;97m       COMANDO PRINCIPAL PARA ENTRAR AL PANEL "
+      echo -e " \033[1;41m                    menu o MENU                   \033[0;37m" && msgi -bar2
     fi
+    meu_ip() {
+      if [[ -e /tmp/IP ]]; then
+        echo "$(cat /tmp/IP)"
+      else
+        MEU_IP=$(wget -qO- ifconfig.me)
+        echo "$MEU_IP" >/tmp/IP
+      fi
+    }
+    meu_ip
+    exit
   }
-  meu_ip &>/dev/null
-  exit
-}
-
   ofus() {
     unset server
     server=$(echo ${txt_ofuscatw} | cut -d':' -f1)
