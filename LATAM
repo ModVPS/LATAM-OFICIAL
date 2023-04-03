@@ -132,6 +132,7 @@ install_inicial() {
   echo "$v1" >/etc/SCRIPT-LATAM/temp/version_instalacion
   v22=$(cat /etc/SCRIPT-LATAM/temp/version_instalacion)
   vesaoSCT="\033[1;31m [ \033[1;32m($v22)\033[1;97m\033[1;31m ]"
+  echo "not_banned" >/etc/SCRIPT-LATAM/temp/ban_status
   #-- CONFIGURACION BASICA
   os_system
   repo "${vercion}"
@@ -260,6 +261,10 @@ done
 
 ## PASO DOS
 Install_key() {
+  tput cuu1 && tput dl1
+  tput cuu1 && tput dl1
+  echo -e "     \033[1;4;32mLA KEY ES VALIDA FINALIZANDO INSTALACION \033[0;39m"
+  ##-->> ACOPLANDO INSTALL EN /BIN
   wget /root/LATAM https://raw.githubusercontent.com/ModVPS/LATAM-OFICIAL/main/LATAM -O /usr/bin/LATAM &>/dev/null
   chmod +x /usr/bin/LATAM
   /bin/cp /etc/skel/.bashrc ~/
