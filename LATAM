@@ -261,10 +261,6 @@ done
 
 ## PASO DOS
 Install_key() {
-  tput cuu1 && tput dl1
-  tput cuu1 && tput dl1
-  echo -e "     \033[1;4;32mLA KEY ES VALIDA FINALIZANDO INSTALACION \033[0;39m"
-  ##-->> ACOPLANDO INSTALL EN /BIN
   wget /root/LATAM https://raw.githubusercontent.com/ModVPS/LATAM-OFICIAL/main/LATAM -O /usr/bin/LATAM &>/dev/null
   chmod +x /usr/bin/LATAM
   /bin/cp /etc/skel/.bashrc ~/
@@ -305,7 +301,11 @@ Install_key() {
     byinst="true"
   }
   install_fim() {
-    echo -e "               \033[1;4;32mFinalizando Instalacion\033[0;39m"
+  tput cuu1 && tput dl1
+  tput cuu1 && tput dl1
+  echo -e "     \033[1;4;32mLA KEY ES VALIDA FINALIZANDO INSTALACION \033[0;39m"
+  ##-->> ACOPLANDO INSTALL EN /BIN
+    #echo -e "               \033[1;4;32mFinalizando Instalacion\033[0;39m"
     wget -O /bin/rebootnb https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/rebootnb.sh &>/dev/null
   chmod +x /bin/rebootnb
   wget -O /bin/autoinicios https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/autoinicios &>/dev/null
