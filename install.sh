@@ -487,28 +487,55 @@ Install_key() {
       done
 
       wget -qO- ifconfig.me > /tmp/IP
- userid="${SCPdir}/ID" 
- TOKEN="6116285263:AAFv1BllX3XI8S5_ZMxGhH_u-gicVz3F-nc" 
- URL="https://api.telegram.org/bot$TOKEN/sendMessage" 
- MSG="👇= KEY INSTALADO =👇 
- ╔═════ ▓▓ ࿇ ▓▓ ═════╗ 
- - - - - - - - ×∆× - - - - - - - 
- User ID: $(cat ${userid}) 
- - - - - - - - ×∆× - - - - - - - 
- Usuario: $(cat ${SCPdir}/message.txt) 
- - - - - - - - ×∆× - - - - - - - 
- IP: $(cat ${SCPdir}/IP) 
- - - - - - - - ×∆× - - - - - - - 
- KEY: $Key 
- - - - - - - - ×∆× - - - - - - - 
- By @alexmod80 
- - - - - - - - ×∆× - - - - - - - 
- ╚═════ ▓▓ ࿇ ▓▓ ═════╝ 
- " 
- activ=$(cat ${userid}) 
- curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
- curl -s --max-time 10 -d "chat_id=5745188704&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
- rm ${SCPdir}/IP &>/dev/null 
+  userid="${SCPdir}/ID"
+if [[ $(cat ${userid}|grep "5745188704") = "" ]]; then
+activ=$(cat ${userid})
+GEN="6095735972:AAF6zwFFM1JfFNVLIbYE9GNanssgr4_S_5M"
+UR="https://api.telegram.org/bot$GEN/sendMessage"
+TOKEN="6116285263:AAFv1BllX3XI8S5_ZMxGhH_u-gicVz3F-nc"
+			URL="https://api.telegram.org/bot$TOKEN/sendMessage"
+		MSG="👇❮= 𝙉𝙊𝙏𝙄-𝙆𝙀𝙔 =❯👇   
+ ◄══════◄••◩••►══════►
+ Version: $(cat /etc/versin_script) INSTALADO✓
+ ◄══════◄••◩••►══════►
+ Cliente: $(cat ${SCPdir}/tmp/name)
+ 🆔: $(cat ${userid})
+ SLOGAN: $(cat ${SCPdir}/message.txt)
+ ◄══════◄••◩••►══════►
+ IP: $(cat ${SCPdir}/IP)
+ SYSTEMA: $(cat /tmp/distro)
+ ◄══════◄••◩••►══════►
+ KEY: $Key 👈 Usada
+ ◄══════◄••◩••►══════►
+ By @Lacasitamx
+ ◄══════◄••◩••►══════►
+"
+curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $UR &>/dev/null
+curl -s --max-time 10 -d "chat_id=5745188704&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null
+else
+TOKEN="6116285263:AAFv1BllX3XI8S5_ZMxGhH_u-gicVz3F-nc"
+			URL="https://api.telegram.org/bot$TOKEN/sendMessage"
+		MSG="👇❮= 𝙉𝙊𝙏𝙄-𝙆𝙀𝙔 =❯👇   
+◄══════◄••◩••►══════►
+ Version: $(cat /etc/versin_script) INSTALADO✓
+◄══════◄••◩••►══════►
+ Admin: $(cat ${SCPdir}/tmp/name)
+ ID: $(cat ${userid})
+ SLOGAN: $(cat ${SCPdir}/message.txt)
+ ◄══════◄••◩••►══════►
+ IP: $(cat ${SCPdir}/IP)
+ SYSTEMA: $(cat /tmp/distro)
+ ◄══════◄••◩••►══════►
+ KEY: $Key 👈Usada
+ ◄══════◄••◩••►══════►
+ By @Lacasitamx
+ ◄══════◄••◩••►══════►
+"
+curl -s --max-time 10 -d "chat_id=5745188704&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null
+fi
+	rm ${SCPdir}/tmp/name &>/dev/null
+   rm ${SCPdir}/IP &>/dev/null
+   rm /tmp/distro &>/dev/null
  msg -bar2 
       msgi -bar2
       listaarqs="$(locate "lista-arq" | head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs
