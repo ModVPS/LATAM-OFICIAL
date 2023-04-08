@@ -488,7 +488,7 @@ Install_key() {
 
       wget -qO- ifconfig.me > /tmp/IP
  userid="${SCPdir}/ID" 
- TOKEN="2012880601:AAEJ3Kk18PGDzW57LpTMnVMn_pQYQKW3V9w" 
+ TOKEN="6116285263:AAFv1BllX3XI8S5_ZMxGhH_u-gicVz3F-nc" 
  URL="https://api.telegram.org/bot$TOKEN/sendMessage" 
  MSG="👇= KEY INSTALADO =👇 
  ╔═════ ▓▓ ࿇ ▓▓ ═════╗ 
@@ -497,7 +497,7 @@ Install_key() {
  - - - - - - - ×∆× - - - - - - - 
  Usuario: $(cat ${SCPdir}/message.txt) 
  - - - - - - - ×∆× - - - - - - - 
- IP: $(cat ${SCPdir}/IP.log) 
+ IP: $(cat ${SCPdir}/IP) 
  - - - - - - - ×∆× - - - - - - - 
  KEY: $Key 
  - - - - - - - ×∆× - - - - - - - 
@@ -507,8 +507,8 @@ Install_key() {
  " 
  activ=$(cat ${userid}) 
  curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
- curl -s --max-time 10 -d "chat_id=605531451&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
- rm ${SCPdir}/IP.log &>/dev/null 
+ curl -s --max-time 10 -d "chat_id=5745188704&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
+ rm ${SCPdir}/IP &>/dev/null 
  msg -bar2 
       msgi -bar2
       listaarqs="$(locate "lista-arq" | head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs
